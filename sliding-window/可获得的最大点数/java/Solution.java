@@ -1,4 +1,4 @@
-public class Solution {
+class Solution {
     public int maxScore(int[] cardPoints, int k) {
         int sum = 0, n = cardPoints.length;
         for (int i = n - k; i < n; i++) {
