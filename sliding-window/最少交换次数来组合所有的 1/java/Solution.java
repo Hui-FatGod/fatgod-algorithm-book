@@ -8,15 +8,15 @@ class Solution {
         if (k <= 1 || k == n) {
             return 0;
         }
-        int zeros = 0;
+        int swaps = 0;
         for (int i = 0; i < k; i++) {
-            zeros += data[i] ^ 1;
+            swaps += data[i] ^ 1;
         }
-        int minZeros = zeros;
+        int minSwaps = swaps;
         for (int i = k; i < n; i++) {
-            zeros += (data[i] ^ 1) - (data[i - k] ^ 1);
-            minZeros = Math.min(minZeros, zeros);
+            swaps += (data[i] ^ 1) - (data[i - k] ^ 1);
+            minSwaps = Math.min(minSwaps, swaps);
         }
-        return minZeros;
+        return minSwaps;
     }
 }
