@@ -1,4 +1,5 @@
 {
     "type": "perf",
-    "core": "Rabin-Karp"
+    "core": "Rabin-Karp",
+    "other": "英文字母可以用数组映射哈希表"
 }
