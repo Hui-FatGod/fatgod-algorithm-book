@@ -3,15 +3,15 @@ import java.util.Map;
 
 class Solution {
     public int maxSubarrayLength(int[] nums, int k) {
-        int ans = 0, left = 0;
-        Map<Integer, Integer> cnt = new HashMap<>();
-        for (int right = 0; right < nums.length; right++) {
-            cnt.merge(nums[right], 1, Integer::sum);
-            while (cnt.get(nums[right]) > k) {
-                cnt.merge(nums[left++], -1, Integer::sum);
+        Map<Integer, Integer> map = new HashMap<>();
+        int maxLength = 0;
+        for (int left = 0, right = 0; right < nums.length; right++) {
+            map.put(nums[right], map.getOrDefault(nums[right], 0) + 1);
+            while (map.get(nums[right]) > k) {
+                map.merge(nums[left++], -1, Integer::sum);
             }
-            ans = Math.max(ans, right - left + 1);
+            maxLength = Math.max(maxLength, right - left + 1);
         }
-        return ans;
+        return maxLength;
     }
 }
