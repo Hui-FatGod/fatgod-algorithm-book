@@ -1,34 +1,34 @@
 class Solution {
     public long countOfSubstrings(String word, int k) {
-        char[] s = word.toCharArray();
-        return f(s, k) - f(s, k + 1);
+        return getSubs(word, k) - getSubs(word, k + 1);
     }
 
-    private long f(char[] word, int k) {
-        long ans = 0;
-        // 这里用哈希表实现，替换成数组会更快
-        HashMap<Character, Integer> cnt1 = new HashMap<>(); // 每种元音的个数
-        int cnt2 = 0; // 辅音个数
-        int left = 0;
-        for (char b : word) {
-            if ("aeiou".indexOf(b) >= 0) {
-                cnt1.merge(b, 1, Integer::sum); // ++cnt1[b]
+    private long getSubs(String word, int k) {
+        char[] chars = word.toCharArray();
+        int length = chars.length;
+        int[] countTable = new int[26];
+        int vowelTypes = 0, consonants = 0;
+        long subs = 0;
+        for (int left = 0, right = 0; right < length; right++) {
+            if (isVowel(chars[right])) {
+                vowelTypes += ++countTable[chars[right] - 'a'] == 1 ? 1 : 0;
             } else {
-                cnt2++;
+                consonants++;
             }
-            while (cnt1.size() == 5 && cnt2 >= k) {
-                char out = word[left];
-                if ("aeiou".indexOf(out) >= 0) {
-                    if (cnt1.merge(out, -1, Integer::sum) == 0) { // --cnt1[out] == 0
-                        cnt1.remove(out);
-                    }
+            while (vowelTypes == 5 && consonants >= k) {
+                subs += length - right;
+                if (isVowel(chars[left])) {
+                    vowelTypes -= --countTable[chars[left] - 'a'] == 0 ? 1 : 0;
                 } else {
-                    cnt2--;
+                    consonants--;
                 }
                 left++;
             }
-            ans += left;
         }
-        return ans;
+        return subs;
+    }
+
+    private boolean isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
     }
 }
