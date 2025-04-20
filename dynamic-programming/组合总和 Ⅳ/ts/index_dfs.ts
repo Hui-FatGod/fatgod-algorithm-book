@@ -11,7 +11,7 @@ function combinationSum4(nums: number[], target: number): number {
         }
         let combinations = 0
         for (let num of nums) {
-            if (num > i) {
+            if (i < num) {
                 continue
             }
             combinations += dfs(i - num)
@@ -20,3 +20,5 @@ function combinationSum4(nums: number[], target: number): number {
     }
     return dfs(target)
 }
+
+export {}
