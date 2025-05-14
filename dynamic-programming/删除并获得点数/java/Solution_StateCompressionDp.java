@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-class Solution_Dp {
+class Solution_StateCompressionDp {
     public int deleteAndEarn(int[] nums) {
         Map<Integer, Integer> countTable = new HashMap<>();
         for (int num : nums) {
@@ -19,13 +19,14 @@ class Solution_Dp {
         if (n == 1) {
             return newNums[0] * countTable.get(newNums[0]);
         }
-        int[] dp = new int[n];
-        dp[0] = newNums[0] * countTable.get(newNums[0]);
+        int prev = 0, current = newNums[0] * countTable.get(newNums[0]);
         for (int i = 1; i < n; i++) {
             int points = newNums[i] * countTable.get(newNums[i]);
-            dp[i] = newNums[i] - newNums[i - 1] > 1 ? points + dp[i - 1]
-                    : Math.max(points + (i < 2 ? 0 : dp[i - 2]), dp[i - 1]);
+            int next = newNums[i] - newNums[i - 1] > 1 ? points + current
+                    : Math.max(points + prev, current);
+            prev = current;
+            current = next;
         }
-        return dp[n - 1];
+        return current;
     }
 }

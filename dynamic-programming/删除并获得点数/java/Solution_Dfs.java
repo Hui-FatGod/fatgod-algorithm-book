@@ -1,36 +1,42 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 class Solution_Dfs {
     private final static int NOT_CALC = -1;
 
     public int deleteAndEarn(int[] nums) {
-        TreeMap<Integer, Integer> countTable = new TreeMap<>();
+        final Map<Integer, Integer> countTable = new HashMap<>();
         for (int num : nums) {
             countTable.merge(num, 1, Integer::sum);
         }
         Set<Integer> set = countTable.keySet();
-        int start = 0, n = set.size();
-        int[] numArr = new int[n];
-        for (int num : set) {
-            numArr[start++] = num;
+        int n = set.size(), start = 0;
+        final int[] newNums = new int[n], memory = new int[n];
+        for (Integer num : set) {
+            newNums[start++] = num;
         }
-        int[] memory = new int[n];
+        Arrays.sort(newNums);
         Arrays.fill(memory, NOT_CALC);
-        return dfs(numArr.length - 1, numArr, countTable, memory);
-    }
-
-    private int dfs(int i, int[] nums, TreeMap<Integer, Integer> countTable, int[] memory) {
-        if (i < 0) {
-            return 0;
-        }
-        if (i == 0) {
-            return nums[0] * countTable.get(nums[0]);
-        }
-        if (memory[i] != NOT_CALC) {
-            return memory[i];
-        }
-        int points = nums[i] * countTable.get(nums[i]);
-        return memory[i] = nums[i] - nums[i - 1] > 1 ? points + dfs(i - 1, nums, countTable, memory)
-                : Math.max(points + dfs(i - 2, nums, countTable, memory), dfs(i - 1, nums, countTable, memory));
+        Function<Integer, Integer> dfs = new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer i) {
+                if (i < 0) {
+                    return 0;
+                }
+                if (i == 0) {
+                    return newNums[0] * countTable.get(newNums[0]);
+                }
+                if (memory[i] != NOT_CALC) {
+                    return memory[i];
+                }
+                int points = newNums[i] * countTable.get(newNums[i]);
+                return memory[i] = newNums[i] - newNums[i - 1] > 1 ? points + this.apply(i - 1)
+                        : Math.max(points + this.apply(i - 2), this.apply(i - 1));
+            }
+        };
+        return dfs.apply(n - 1);
     }
 }
