@@ -1,10 +1,11 @@
 const NOT_CALCULATED_VALUE = undefined
 
 function minimumTotal(triangle: number[][]): number {
-    const m = triangle.length
-    const memory: number[][] = Array.from({length: m}, (): number[] => [])
+    const n = triangle.length
+    let start = 0
+    const memory: number[][] = Array.from({length: n}, (): number[] => Array(++start).fill(NOT_CALCULATED_VALUE))
     const dfs = (i: number, j: number): number => {
-        if (i === m - 1) {
+        if (i === n - 1) {
             return triangle[i][j]
         }
         if (memory[i][j] !== NOT_CALCULATED_VALUE) {
