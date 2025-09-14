@@ -1,0 +1,6 @@
+{
+  "title": "总价值可以被 K 整除的岛屿数目",
+  "number": 3619,
+  "difficulty": "medium",
+  "url": "https://leetcode.cn/problems/count-islands-with-total-value-divisible-by-k"
+}
